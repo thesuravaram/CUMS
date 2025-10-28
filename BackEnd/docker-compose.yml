@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # ==============================
+  # PostgreSQL - Core Relational Data
+  # ==============================
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: login_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ==============================
+  # MongoDB - Metadata, Events, Flexible Data
+  # ==============================
+  mongodb:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - mongo_data:/data/db
+
+  # ==============================
+  # Cassandra - Document Storage / Logs
+  # ==============================
+  cassandra:
+    image: cassandra:4.1
+    restart: always
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_PASSWORD_AUTHENTICATION: "true"
+      CASSANDRA_USERNAME: cassandra
+      CASSANDRA_PASSWORD: cassandra123
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+
+volumes:
+  postgres_data:
+  mongo_data:
+  cassandra_data:
